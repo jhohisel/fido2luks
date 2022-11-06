@@ -11,12 +11,16 @@ fido2luks credential
 # Copy returned string <CREDENTIAL>
 
 nano /etc/fido2luks.conf
-# Insert <CREDENTIAL> 
-# FIDO2LUKS_CREDENTIAL_ID=<CREDENTIAL> 
+# Create a salt, e.g.:
+# FIDO2LUKS_SALT=string:<random 512 bytes base64-encoded>
+# Set it to use the token
+# FIDO2LUKS_USE_TOKEN=1
+# Use password fallback
+# FIDO2LUKS_PASSWORD_FALLBACK=1
 
 set -a
 . /etc/fido2luks.conf
-fido2luks -i add-key /dev/<LUKS PARTITION>
+fido2luks add-key -t /dev/<LUKS PARTITION> <CREDENTIAL> --salt $FIDO2LUKS_SALT
 # Current password: <Any current LUKS password>
 # Password: <Password used as FIDO challange>
 # Tap FIDO key
